@@ -2,6 +2,7 @@ package entity
 
 import "time"
 
+// Customer structure describes a customer in the online store
 type Customer struct {
 	ID          int64
 	Email       string

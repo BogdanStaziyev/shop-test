@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS orders(
     id              serial    PRIMARY KEY,
-    created_date    timestamp NOT NULL,
-    updated_date    timestamp NOT NULL,
-    deleted_date    timestamp NULL
+    customer_id     INTEGER   NOT NULL REFERENCES customers(id),
+    created_date    TIMESTAMP NOT NULL,
+    updated_date    TIMESTAMP NOT NULL,
+    deleted_date    TIMESTAMP NULL
 );

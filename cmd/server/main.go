@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-	// initialize configuration
+	// Initialize configuration
 	conf := config.GetConfiguration()
 
-	// run application
+	// Run application
 	app.Run(conf)
 }

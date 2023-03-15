@@ -9,12 +9,14 @@ const (
 	SALESMAN Role = "salesman"
 )
 
+// Salesman structure describes the sellers and admins in the online store.
 type Salesman struct {
 	ID          int64
 	Email       string
 	Password    string
 	Name        string
 	Phone       string
+	Products    []Product
 	Role        Role
 	CreatedDate time.Time
 	UpdatedDate time.Time
