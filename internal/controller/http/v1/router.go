@@ -3,17 +3,22 @@ package v1
 import (
 	"net/http"
 
-	// External chi
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	// External
+	"github.com/BogdanStaziyev/shop-test/pkg/logger"
+	"github.com/BogdanStaziyev/shop-test/pkg/validators"
 
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/responses"
 )
 
 // Router initialize new CHI router
-func Router(router *chi.Mux) http.Handler {
+func Router(router *chi.Mux, l logger.Interface) http.Handler {
 	router.Use(middleware.RedirectSlashes, middleware.Logger)
+
+	validator := validators.NewValidator()
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		// Health
@@ -24,6 +29,7 @@ func Router(router *chi.Mux) http.Handler {
 		apiRouter.Route("/v1", func(apiRouter chi.Router) {
 			// Public routes
 			apiRouter.Group(func(apiRouter chi.Router) {
+				newCustomerHandler(apiRouter, validator, l)
 				apiRouter.Handle("/*", NotFoundJSON())
 			})
 		})

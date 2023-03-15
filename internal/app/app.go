@@ -42,7 +42,7 @@ func Run(conf config.Configuration) {
 
 	//HTTP server start
 	handler := chi.NewRouter()
-	v1.Router(handler)
+	v1.Router(handler, l)
 	server := httpserver.New(handler, httpserver.Port(conf.ServerPort))
 
 	// Waiting signals
