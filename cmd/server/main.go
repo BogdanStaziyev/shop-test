@@ -2,10 +2,10 @@ package main
 
 import (
 
-	// configurations
+	// Configurations
 	"github.com/BogdanStaziyev/shop-test/config"
 
-	// internal
+	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/app"
 )
 
