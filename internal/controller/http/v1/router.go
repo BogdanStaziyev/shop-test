@@ -11,6 +11,7 @@ import (
 	"github.com/BogdanStaziyev/shop-test/pkg/validators"
 
 	// Internal
+	"github.com/BogdanStaziyev/shop-test/internal/controller/http/middlewares"
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/responses"
 	"github.com/BogdanStaziyev/shop-test/internal/service"
 )
@@ -22,7 +23,7 @@ func Router(router *chi.Mux, service service.Services, l logger.Interface) http.
 	// Initialize a validator that validates data in requests using tags
 	validator := validators.NewValidator()
 
-	router.Route("/api", func(apiRouter chi.Router) {
+	router.With(middlewares.CheckAuth).Route("/api", func(apiRouter chi.Router) {
 		// Health
 		apiRouter.Route("/ping", func(healthRouter chi.Router) {
 			healthRouter.Get("/", PingHandler())
@@ -33,6 +34,7 @@ func Router(router *chi.Mux, service service.Services, l logger.Interface) http.
 			apiRouter.Group(func(apiRouter chi.Router) {
 				newCustomerHandler(apiRouter, service.Customer, validator, l)
 			})
+			apiRouter.Handle("/*", NotFoundJSON())
 		})
 		apiRouter.Handle("/*", NotFoundJSON())
 	})
