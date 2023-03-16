@@ -7,7 +7,6 @@ import (
 	"time"
 
 	// External
-	"github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -22,8 +21,7 @@ type Postgres struct {
 	connAttempts int
 	connTimeout  time.Duration
 
-	Builder squirrel.StatementBuilderType
-	Pool    *pgxpool.Pool
+	Pool *pgxpool.Pool
 }
 
 // New - initialize new Postgres connection.
@@ -38,8 +36,6 @@ func New(url string, opts ...Option) (*Postgres, error) {
 	for _, opt := range opts {
 		opt(pg)
 	}
-
-	pg.Builder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
 
 	poolConfig, err := pgxpool.ParseConfig(url)
 	if err != nil {

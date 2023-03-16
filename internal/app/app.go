@@ -7,16 +7,20 @@ import (
 	"syscall"
 
 	"github.com/go-chi/chi/v5"
+	"golang.org/x/crypto/bcrypt"
 
 	// Configuration
 	"github.com/BogdanStaziyev/shop-test/config"
 
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/v1"
+	"github.com/BogdanStaziyev/shop-test/internal/database"
+	"github.com/BogdanStaziyev/shop-test/internal/service"
 
 	// External
 	"github.com/BogdanStaziyev/shop-test/pkg/httpserver"
 	"github.com/BogdanStaziyev/shop-test/pkg/logger"
+	"github.com/BogdanStaziyev/shop-test/pkg/passwords"
 	"github.com/BogdanStaziyev/shop-test/pkg/postgres"
 )
 
@@ -40,9 +44,22 @@ func Run(conf config.Configuration) {
 	}
 	defer pg.Close()
 
-	//HTTP server start
+	// Create password generator
+	passGen := passwords.NewGeneratePasswordHash(bcrypt.DefaultCost)
+
+	// Databases struct of db
+	databases := service.Databases{
+		Customer: database.NewCustomerRepo(pg),
+	}
+
+	// Services struct of all services
+	services := service.Services{
+		Customer: service.NewCustomerService(databases.Customer, passGen),
+	}
+
+	// HTTP server start
 	handler := chi.NewRouter()
-	v1.Router(handler, l)
+	v1.Router(handler, services, l)
 	server := httpserver.New(handler, httpserver.Port(conf.ServerPort))
 
 	// Waiting signals
