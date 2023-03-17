@@ -13,11 +13,10 @@ import (
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/middlewares"
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/responses"
-	"github.com/BogdanStaziyev/shop-test/internal/service"
 )
 
 // Router initialize new CHI router
-func Router(router *chi.Mux, service service.Services, l logger.Interface, user, password string) http.Handler {
+func Router(router *chi.Mux, service Services, l logger.Interface, user, password string) http.Handler {
 	router.Use(middleware.RedirectSlashes, middleware.Logger)
 
 	// Initialize a validator that validates data in requests using tags

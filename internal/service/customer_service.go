@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/entity"
 
@@ -14,8 +13,6 @@ type customerService struct {
 	cr CustomerRepo
 	pg passwords.Generator
 }
-
-var _ CustomerService = (*customerService)(nil)
 
 func NewCustomerService(cr CustomerRepo, pg passwords.Generator) *customerService {
 	return &customerService{

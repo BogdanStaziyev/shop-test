@@ -7,7 +7,6 @@ import (
 
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/entity"
-	"github.com/BogdanStaziyev/shop-test/internal/service"
 
 	// External
 	"github.com/BogdanStaziyev/shop-test/pkg/postgres"
@@ -16,8 +15,6 @@ import (
 type customerRepo struct {
 	*postgres.Postgres
 }
-
-var _ service.CustomerRepo = (*customerRepo)(nil)
 
 func NewCustomerRepo(cr *postgres.Postgres) *customerRepo {
 	return &customerRepo{cr}
