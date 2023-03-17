@@ -17,7 +17,7 @@ import (
 )
 
 // Router initialize new CHI router
-func Router(router *chi.Mux, service service.Services, l logger.Interface) http.Handler {
+func Router(router *chi.Mux, service service.Services, l logger.Interface, user, password string) http.Handler {
 	router.Use(middleware.RedirectSlashes, middleware.Logger)
 
 	// Initialize a validator that validates data in requests using tags
@@ -32,7 +32,7 @@ func Router(router *chi.Mux, service service.Services, l logger.Interface) http.
 		apiRouter.Route("/v1", func(apiRouter chi.Router) {
 			// Private routes
 			// Only admin can send requests using basic auth (user - password)
-			apiRouter.With(middlewares.CheckAuth).Group(func(apiRouter chi.Router) {
+			apiRouter.With(middlewares.CheckAuth(password, user)).Group(func(apiRouter chi.Router) {
 				newCustomerHandler(apiRouter, service.Customer, validator, l)
 			})
 			apiRouter.Handle("/*", NotFoundJSON())

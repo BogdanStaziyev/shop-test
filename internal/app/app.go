@@ -58,7 +58,7 @@ func Run(conf config.Configuration) {
 
 	// HTTP server start
 	handler := chi.NewRouter()
-	v1.Router(handler, services, l)
+	v1.Router(handler, services, l, conf.AdminName, conf.AdminPassword)
 	server := httpserver.New(handler, httpserver.Port(conf.ServerPort))
 
 	// Waiting signals

@@ -18,6 +18,8 @@ type Configuration struct {
 	LogLevel          string
 	ServerPort        string
 	Cost              string
+	AdminPassword     string
+	AdminName         string
 }
 
 // GetConfiguration returns configuration values from environment variables
@@ -51,5 +53,7 @@ func GetConfiguration() Configuration {
 		MigrateToVersion:  migrateToVersion,
 		MigrationLocation: migrationLocation,
 		Cost:              os.Getenv("COST"),
+		AdminName:         os.Getenv("ADMIN_NAME"),
+		AdminPassword:     os.Getenv("ADMIN_PASSWORD"),
 	}
 }
