@@ -7,7 +7,6 @@ import (
 	"syscall"
 
 	"github.com/go-chi/chi/v5"
-	"golang.org/x/crypto/bcrypt"
 
 	// Configuration
 	"github.com/BogdanStaziyev/shop-test/config"
@@ -45,7 +44,7 @@ func Run(conf config.Configuration) {
 	defer pg.Close()
 
 	// Create password generator
-	passGen := passwords.NewGeneratePasswordHash(bcrypt.DefaultCost)
+	passGen := passwords.NewGeneratePasswordHash(conf.Cost)
 
 	// Databases struct of db
 	databases := service.Databases{

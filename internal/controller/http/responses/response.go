@@ -15,7 +15,7 @@ type Error struct {
 // Data structure for Response
 type Data struct {
 	Code int         `json:"code"`
-	Args interface{} `json:"arguments"`
+	Args interface{} `json:"response"`
 }
 
 // Message structure for MessageResponse

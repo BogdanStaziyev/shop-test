@@ -1,6 +1,9 @@
 package passwords
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+	"strconv"
+)
 
 type Generator interface {
 	// GeneratePasswordHash generates a password hash for storage in the database
@@ -10,17 +13,21 @@ type Generator interface {
 }
 
 type generatePasswordHash struct {
-	cost int
+	cost string
 }
 
-func NewGeneratePasswordHash(cost int) *generatePasswordHash {
+func NewGeneratePasswordHash(cost string) *generatePasswordHash {
 	return &generatePasswordHash{
 		cost: cost,
 	}
 }
 
 func (g generatePasswordHash) GeneratePasswordHash(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), g.cost)
+	cost, err := strconv.Atoi(g.cost)
+	if err != nil {
+		cost = bcrypt.DefaultCost
+	}
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
 	return string(bytes), err
 }
 

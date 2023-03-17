@@ -3,7 +3,6 @@ package config
 import (
 	"log"
 	"os"
-
 	// External
 	"github.com/joho/godotenv"
 )
@@ -18,6 +17,7 @@ type Configuration struct {
 	DatabasePort      string
 	LogLevel          string
 	ServerPort        string
+	Cost              string
 }
 
 // GetConfiguration returns configuration values from environment variables
@@ -50,5 +50,6 @@ func GetConfiguration() Configuration {
 		ServerPort:        os.Getenv("PORT_SERVER"),
 		MigrateToVersion:  migrateToVersion,
 		MigrationLocation: migrationLocation,
+		Cost:              os.Getenv("COST"),
 	}
 }
