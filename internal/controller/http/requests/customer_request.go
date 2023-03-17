@@ -6,9 +6,9 @@ import (
 	"github.com/BogdanStaziyev/shop-test/internal/entity"
 )
 
-// RegisterCustomer structure that should come in JSON format.
+// RequestCustomer structure that should come in JSON format.
 // All fields are mandatory for validation
-type RegisterCustomer struct {
+type RequestCustomer struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,gte=8"`
 	Name     string `json:"name" validate:"required,gte=3"`
@@ -16,7 +16,7 @@ type RegisterCustomer struct {
 }
 
 // RequestTOEntity converts the requests structure into an entity
-func (r RegisterCustomer) RequestTOEntity() entity.Customer {
+func (r RequestCustomer) RequestTOEntity() entity.Customer {
 	return entity.Customer{
 		Email:    r.Email,
 		Password: r.Password,

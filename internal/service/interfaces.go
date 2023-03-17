@@ -20,6 +20,9 @@ type CustomerService interface {
 	// FindByID receives the customer structure from the handler.
 	// Passes it to the repository and after receiving the entity.Customer and error, returns they.
 	FindByID(id int64) (entity.Customer, error)
+	// Delete it simply passes the id to the repository without performing any actions.
+	Delete(id int64) error
+	Update(id int64, customer entity.Customer) error
 }
 
 type CustomerRepo interface {
@@ -27,4 +30,8 @@ type CustomerRepo interface {
 	Create(customer entity.Customer) (int64, error)
 	// GetByID returns the entity.Customer and error
 	GetByID(id int64) (entity.Customer, error)
+	// Delete searches in the database if a customer exists by id.
+	// Sets the current time in the "deleted_date" field.
+	Delete(id int64) error
+	Update(customer entity.Customer) error
 }

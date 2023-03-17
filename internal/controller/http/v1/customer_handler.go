@@ -31,14 +31,22 @@ func newCustomerHandler(r chi.Router, cs service.CustomerService, v *validators.
 		cs: cs,
 	}
 
-	r.Route("/customer", func(customer chi.Router) {
+	r.Route("/customers", func(customer chi.Router) {
 		customer.Post(
-			"/save",
+			"/",
 			c.createCustomer(),
 		)
 		customer.Get(
 			"/{id}",
 			c.getByID(),
+		)
+		customer.Delete(
+			"/{id}",
+			c.delete(),
+		)
+		customer.Put(
+			"/{id}",
+			c.updateCustomer(),
 		)
 		customer.Handle("/*", NotFoundJSON())
 	})
@@ -47,7 +55,7 @@ func newCustomerHandler(r chi.Router, cs service.CustomerService, v *validators.
 // saveCustomer Admin can create a new customers
 func (c customerHandler) createCustomer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var customer requests.RegisterCustomer
+		var customer requests.RequestCustomer
 		if err := c.v.Validate(r, &customer); err != nil {
 			c.l.Error("CustomerHandler validation error", "err", err)
 			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
@@ -57,12 +65,12 @@ func (c customerHandler) createCustomer() http.HandlerFunc {
 		id, err := c.cs.Save(customer.RequestTOEntity())
 		if err != nil {
 			if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
-				c.l.Error("CustomerHandler SaveCustomer", "err", err)
-				responses.ErrorResponse(w, http.StatusNotFound, "Could not save new customer user already exists")
+				c.l.Error("CustomerHandler createCustomer", "err", err)
+				responses.ErrorResponse(w, http.StatusNotFound, "Could not save new customer, already exists")
 				return
 
 			} else {
-				c.l.Error("CustomerHandler SaveCustomer", "err", err)
+				c.l.Error("CustomerHandler createCustomer", "err", err)
 				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not save new customer")
 				return
 			}
@@ -84,11 +92,76 @@ func (c customerHandler) getByID() http.HandlerFunc {
 
 		customer, err := c.cs.FindByID(id)
 		if err != nil {
-			c.l.Error("CustomerHandler GetByID", "err", err)
-			responses.ErrorResponse(w, http.StatusInternalServerError, "Could not find customer")
+			if strings.Contains(err.Error(), "no rows in result set") {
+				c.l.Error("CustomerHandler createCustomer", "err", err)
+				responses.ErrorResponse(w, http.StatusNotFound, "Could not find, customer not exists")
+				return
+			} else {
+				c.l.Error("CustomerHandler getByID", "err", err)
+				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not find customer")
+				return
+			}
+		}
+		responses.Response(w, http.StatusOK, customer.Response())
+	}
+}
+
+// delete Admin can delete customers by id
+func (c customerHandler) delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			c.l.Error("ID should be a number", "have: ", id)
+			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
 			return
 		}
 
-		responses.Response(w, http.StatusOK, customer.Response())
+		err = c.cs.Delete(id)
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				c.l.Error("CustomerHandler createCustomer", "err", err)
+				responses.ErrorResponse(w, http.StatusNotFound, "Could not delete, customer not exists")
+				return
+			} else {
+				c.l.Error("CustomerHandler delete", "err", err)
+				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not find customer")
+				return
+			}
+		}
+		responses.MessageResponse(w, http.StatusOK, "Customer deleted successfully")
+	}
+}
+
+// saveCustomer Admin can create a new customers
+func (c customerHandler) updateCustomer() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var customer requests.RequestCustomer
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			c.l.Error("ID should be a number", "have: ", id)
+			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
+			return
+		}
+		if err = c.v.Validate(r, &customer); err != nil {
+			c.l.Error("CustomerHandler validation error", "err", err)
+			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
+			return
+		}
+
+		err = c.cs.Update(id, customer.RequestTOEntity())
+		if err != nil {
+			if strings.Contains(err.Error(), "no rows in result set") {
+				c.l.Error("CustomerHandler updateCustomer", "err", err)
+				responses.ErrorResponse(w, http.StatusNotFound, "Could not update, customer not exists")
+				return
+
+			} else {
+				c.l.Error("CustomerHandler updateCustomer", "err", err)
+				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not update customer")
+				return
+			}
+		}
+
+		responses.MessageResponse(w, http.StatusOK, "Customer updated successfully")
 	}
 }

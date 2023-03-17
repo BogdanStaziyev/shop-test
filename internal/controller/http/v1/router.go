@@ -23,6 +23,7 @@ func Router(router *chi.Mux, service service.Services, l logger.Interface) http.
 	// Initialize a validator that validates data in requests using tags
 	validator := validators.NewValidator()
 
+	// Only admin can send requests using basic auth (user - password)
 	router.With(middlewares.CheckAuth).Route("/api", func(apiRouter chi.Router) {
 		// Health
 		apiRouter.Route("/ping", func(healthRouter chi.Router) {

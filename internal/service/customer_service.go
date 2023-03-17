@@ -44,3 +44,24 @@ func (c *customerService) FindByID(id int64) (entity.Customer, error) {
 	}
 	return customer, nil
 }
+
+func (c *customerService) Delete(id int64) error {
+	if err := c.cr.Delete(id); err != nil {
+		return fmt.Errorf("customerService Delete customer: %w", err)
+	}
+	return nil
+}
+
+func (c *customerService) Update(id int64, customer entity.Customer) (err error) {
+	// Generates a password hash for storage in the database
+	customer.Password, err = c.pg.GeneratePasswordHash(customer.Password)
+	if err != nil {
+		return fmt.Errorf("customerService Update customer, could not generate hash: %w", err)
+	}
+	customer.ID = id
+	err = c.cr.Update(customer)
+	if err != nil {
+		return fmt.Errorf("customerService Update customer: %w", err)
+	}
+	return nil
+}
