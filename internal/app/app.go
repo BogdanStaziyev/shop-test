@@ -52,7 +52,7 @@ func Run(conf config.Configuration) {
 	}
 
 	// Services struct of all services
-	services := service.Services{
+	services := v1.Services{
 		Customer: service.NewCustomerService(databases.Customer, passGen),
 	}
 

@@ -11,7 +11,6 @@ import (
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/requests"
 	"github.com/BogdanStaziyev/shop-test/internal/controller/http/responses"
-	"github.com/BogdanStaziyev/shop-test/internal/service"
 
 	// External
 	"github.com/BogdanStaziyev/shop-test/pkg/logger"
@@ -21,10 +20,10 @@ import (
 type customerHandler struct {
 	v  validators.Validator
 	l  logger.Interface
-	cs service.CustomerService
+	cs CustomerService
 }
 
-func newCustomerHandler(r chi.Router, cs service.CustomerService, v validators.Validator, l logger.Interface) {
+func newCustomerHandler(r chi.Router, cs CustomerService, v validators.Validator, l logger.Interface) {
 	c := &customerHandler{
 		v:  v,
 		l:  l,
