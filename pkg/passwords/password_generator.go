@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+//go:generate mockery --dir . --name Generator --output ./passwordMock
 type Generator interface {
 	// GeneratePasswordHash generates a password hash for storage in the database
 	GeneratePasswordHash(password string) (string, error)

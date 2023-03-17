@@ -19,12 +19,12 @@ import (
 )
 
 type customerHandler struct {
-	v  *validators.Validator
+	v  validators.Validator
 	l  logger.Interface
 	cs service.CustomerService
 }
 
-func newCustomerHandler(r chi.Router, cs service.CustomerService, v *validators.Validator, l logger.Interface) {
+func newCustomerHandler(r chi.Router, cs service.CustomerService, v validators.Validator, l logger.Interface) {
 	c := &customerHandler{
 		v:  v,
 		l:  l,
@@ -56,7 +56,7 @@ func newCustomerHandler(r chi.Router, cs service.CustomerService, v *validators.
 func (c customerHandler) createCustomer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer requests.RequestCustomer
-		if err := c.v.Validate(r, &customer); err != nil {
+		if err := c.v.ValidateRequest(r, &customer); err != nil {
 			c.l.Error("CustomerHandler createCustomer validation error", "err", err)
 			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
 			return
@@ -142,7 +142,7 @@ func (c customerHandler) updateCustomer() http.HandlerFunc {
 			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
 			return
 		}
-		if err = c.v.Validate(r, &customer); err != nil {
+		if err = c.v.ValidateRequest(r, &customer); err != nil {
 			c.l.Error("CustomerHandler updateCustomer validation error", "err", err)
 			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
 			return

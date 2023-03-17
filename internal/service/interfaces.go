@@ -1,6 +1,9 @@
 package service
 
-import "github.com/BogdanStaziyev/shop-test/internal/entity"
+import (
+	// Internal
+	"github.com/BogdanStaziyev/shop-test/internal/entity"
+)
 
 // Databases structure that includes all databases
 type Databases struct {
@@ -12,6 +15,7 @@ type Services struct {
 	Customer CustomerService
 }
 
+//go:generate mockery --dir . --name CustomerService --output ./mocks
 type CustomerService interface {
 	// Create receives the entity.Customer from the handler.
 	// Then hashes the password and passes the structure with the hash instead of the password to the repository.
@@ -28,6 +32,7 @@ type CustomerService interface {
 	Update(id int64, customer entity.Customer) error
 }
 
+//go:generate mockery --dir . --name CustomerRepo --output ./mocks
 type CustomerRepo interface {
 	// Create saved the entity.Customer to the database and returns the id and error
 	Create(customer entity.Customer) (int64, error)

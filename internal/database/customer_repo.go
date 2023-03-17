@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	// Internal
@@ -65,6 +64,5 @@ func (c *customerRepo) Update(customer entity.Customer) error {
 	if rows == 0 {
 		return fmt.Errorf("customer repository Update error: no rows in result set")
 	}
-	log.Println(rows)
 	return nil
 }
