@@ -21,6 +21,5 @@ func CheckAuth(next http.Handler) http.Handler {
 		}
 		w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
 		responses.ErrorResponse(w, http.StatusUnauthorized, "Unauthorized")
-		return
 	})
 }
