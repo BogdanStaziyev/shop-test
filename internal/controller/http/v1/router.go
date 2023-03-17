@@ -23,16 +23,16 @@ func Router(router *chi.Mux, service service.Services, l logger.Interface) http.
 	// Initialize a validator that validates data in requests using tags
 	validator := validators.NewValidator()
 
-	// Only admin can send requests using basic auth (user - password)
-	router.With(middlewares.CheckAuth).Route("/api", func(apiRouter chi.Router) {
+	router.Route("/api", func(apiRouter chi.Router) {
 		// Health
 		apiRouter.Route("/ping", func(healthRouter chi.Router) {
 			healthRouter.Get("/", PingHandler())
 			healthRouter.Handle("/*", NotFoundJSON())
 		})
 		apiRouter.Route("/v1", func(apiRouter chi.Router) {
-			// Public routes
-			apiRouter.Group(func(apiRouter chi.Router) {
+			// Private routes
+			// Only admin can send requests using basic auth (user - password)
+			apiRouter.With(middlewares.CheckAuth).Group(func(apiRouter chi.Router) {
 				newCustomerHandler(apiRouter, service.Customer, validator, l)
 			})
 			apiRouter.Handle("/*", NotFoundJSON())

@@ -57,12 +57,12 @@ func (c customerHandler) createCustomer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer requests.RequestCustomer
 		if err := c.v.Validate(r, &customer); err != nil {
-			c.l.Error("CustomerHandler validation error", "err", err)
+			c.l.Error("CustomerHandler createCustomer validation error", "err", err)
 			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
 			return
 		}
 
-		id, err := c.cs.Save(customer.RequestTOEntity())
+		id, err := c.cs.Create(customer.RequestTOEntity())
 		if err != nil {
 			if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
 				c.l.Error("CustomerHandler createCustomer", "err", err)
@@ -85,7 +85,7 @@ func (c customerHandler) getByID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
-			c.l.Error("ID should be a number", "have: ", id)
+			c.l.Error("ID should be a number getByID", "have: ", id)
 			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
 			return
 		}
@@ -93,7 +93,7 @@ func (c customerHandler) getByID() http.HandlerFunc {
 		customer, err := c.cs.FindByID(id)
 		if err != nil {
 			if strings.Contains(err.Error(), "no rows in result set") {
-				c.l.Error("CustomerHandler createCustomer", "err", err)
+				c.l.Error("CustomerHandler getByID", "err", err)
 				responses.ErrorResponse(w, http.StatusNotFound, "Could not find, customer not exists")
 				return
 			} else {
@@ -111,7 +111,7 @@ func (c customerHandler) delete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
-			c.l.Error("ID should be a number", "have: ", id)
+			c.l.Error("ID should be a number CustomerHandler delete", "have: ", id)
 			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
 			return
 		}
@@ -119,12 +119,12 @@ func (c customerHandler) delete() http.HandlerFunc {
 		err = c.cs.Delete(id)
 		if err != nil {
 			if strings.Contains(err.Error(), "no rows in result set") {
-				c.l.Error("CustomerHandler createCustomer", "err", err)
+				c.l.Error("CustomerHandler delete", "err", err)
 				responses.ErrorResponse(w, http.StatusNotFound, "Could not delete, customer not exists")
 				return
 			} else {
 				c.l.Error("CustomerHandler delete", "err", err)
-				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not find customer")
+				responses.ErrorResponse(w, http.StatusInternalServerError, "Could not delete customer")
 				return
 			}
 		}
@@ -138,12 +138,12 @@ func (c customerHandler) updateCustomer() http.HandlerFunc {
 		var customer requests.RequestCustomer
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
-			c.l.Error("ID should be a number", "have: ", id)
+			c.l.Error("ID should be a number CustomerHandler updateCustomer", "have: ", id)
 			responses.ErrorResponse(w, http.StatusBadRequest, "invalid request body")
 			return
 		}
 		if err = c.v.Validate(r, &customer); err != nil {
-			c.l.Error("CustomerHandler validation error", "err", err)
+			c.l.Error("CustomerHandler updateCustomer validation error", "err", err)
 			responses.ErrorResponse(w, http.StatusBadRequest, "Could not validate customer data")
 			return
 		}
