@@ -65,7 +65,7 @@ func (c customerHandler) createCustomer() http.HandlerFunc {
 		if err != nil {
 			if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
 				c.l.Error("CustomerHandler createCustomer", "err", err)
-				responses.ErrorResponse(w, http.StatusNotFound, "Could not save new customer, already exists")
+				responses.ErrorResponse(w, http.StatusConflict, "Could not save new customer, already exists")
 				return
 
 			} else {

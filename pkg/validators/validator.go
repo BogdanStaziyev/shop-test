@@ -7,6 +7,7 @@ import (
 	"github.com/go-playground/validator"
 )
 
+//go:generate mockery --dir . --name Validator --output ./validatorMock
 type Validator interface {
 	ValidateRequest(r *http.Request, i interface{}) error
 }

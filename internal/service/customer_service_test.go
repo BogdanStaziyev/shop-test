@@ -2,12 +2,18 @@ package service
 
 import (
 	"errors"
-	"github.com/BogdanStaziyev/shop-test/internal/entity"
-	"github.com/BogdanStaziyev/shop-test/internal/service/mocks"
-	"github.com/BogdanStaziyev/shop-test/pkg/passwords"
-	pMock "github.com/BogdanStaziyev/shop-test/pkg/passwords/passwordMock"
+
+	// Test
 	"github.com/stretchr/testify/assert"
 	"testing"
+
+	// Internal
+	"github.com/BogdanStaziyev/shop-test/internal/entity"
+	"github.com/BogdanStaziyev/shop-test/internal/service/mocks"
+
+	// External
+	"github.com/BogdanStaziyev/shop-test/pkg/passwords"
+	pMock "github.com/BogdanStaziyev/shop-test/pkg/passwords/passwordMock"
 )
 
 func Test_customerService_Create(t *testing.T) {
