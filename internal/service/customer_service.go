@@ -2,6 +2,8 @@ package service
 
 import (
 	"fmt"
+	"strings"
+
 	// Internal
 	"github.com/BogdanStaziyev/shop-test/internal/entity"
 
@@ -24,6 +26,8 @@ func NewCustomerService(cr CustomerRepo, pg passwords.Generator) *customerServic
 func (c *customerService) Create(customer entity.Customer) (id int64, err error) {
 	// Generates a password hash for storage in the database
 	customer.Password, err = c.pg.GeneratePasswordHash(customer.Password)
+	// Save Email in low register
+	customer.Email = strings.ToLower(customer.Email)
 	if err != nil {
 		return id, fmt.Errorf("customerService Create customer, could not generate hash: %w", err)
 	}
@@ -56,6 +60,8 @@ func (c *customerService) Update(id int64, customer entity.Customer) (err error)
 		return fmt.Errorf("customerService Update customer, could not generate hash: %w", err)
 	}
 	customer.ID = id
+	// Update Email in low register
+	customer.Email = strings.ToLower(customer.Email)
 	err = c.cr.Update(customer)
 	if err != nil {
 		return fmt.Errorf("customerService Update customer: %w", err)
