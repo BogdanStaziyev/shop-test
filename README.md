@@ -32,6 +32,59 @@ implemented various types of relationships: one-to-one, one-to-many, and many-to
 
 ![Database schema](https://docs.google.com/uc?id=1Gg0l0gVbG1rCs46ROo5zhxPDUgEU2M0d)
 
+## Test Routes
+
+- **To run the project, utilize the docker-compose file located in the ".docker" folder.**
+- **For testing purposes, you can make use of the Postman collection in the ".postman" folder.**
+
+## Endpoints
+
+1. **Save customer**
+    - **Method: POST**
+    - ***Url: http://localhost:8080/api/v1/customers***
+    - **Request structure:**
+    ```json
+    {
+      "name": "User User",
+      "password": "qwerty12345",
+      "email": "user@gmail.com",
+      "phone": "0977777777"
+    }
+    ```
+
+2. **Update customer**
+    - **Method: PUT**
+    - ***Url: http://localhost:8080/api/v1/customers/:id***
+    - **Request structure:**
+    ```json
+    {
+      "name": "New New",
+      "password": "qwerty1234567890",
+      "email": "usernew@gmail.com",
+      "phone": "0988888888"
+    }
+    ```
+
+3. **Find one customer by id**
+    - **Method: GET**
+    - ***Url: http://localhost:8080/api/v1/customers/:id***
+
+4. **Delete customer**
+    - **Method: DELETE**
+    - ***Url: http://localhost:8080/api/v1/customers/:id***
+
+## Second task
+
+**Task number 2 is left in the same repository for convenience of viewing and testing in the folder "
+test_task2_optimize". I wrote a benchmark for the function in the task and also suggested optimization options with
+benchmark results. The test result was added to the README file, and you can also run it yourself with the makefile.**
+
+![Benchmark](https://docs.google.com/uc?id=1jQBYaZmTnxW8v6KT32uV2V9ybD_pORqJ)
+
+**Based on the benchmark results, it is evident that utilizing the "strings.Join" standard library function to
+concatenate strings from a string slice yields the best performance. In fact, the execution speed of this method is 4.5
+times faster than that of the test function.**
+
 # Техническое задание для кандидатов:
 
 1. разработка хттп сервера (задание обязательно к выполнению)

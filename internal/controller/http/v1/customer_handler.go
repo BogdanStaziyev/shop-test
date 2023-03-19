@@ -51,7 +51,8 @@ func newCustomerHandler(r chi.Router, cs CustomerService, v validators.Validator
 	})
 }
 
-// saveCustomer Admin can create a new customers
+// createCustomer handler function for creating a new customer.
+// Validates the incoming request, and sends the validated entity to the service.
 func (c customerHandler) createCustomer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer requests.RequestCustomer
@@ -79,7 +80,8 @@ func (c customerHandler) createCustomer() http.HandlerFunc {
 	}
 }
 
-// getByID only Admin can get customers
+// getByID function is a request handler for retrieving customer data by ID.
+// Performing request validation and sending the validated entity to the service.
 func (c customerHandler) getByID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
@@ -105,7 +107,7 @@ func (c customerHandler) getByID() http.HandlerFunc {
 	}
 }
 
-// delete Admin can delete customers by id
+// delete HTTP handler for deleting a customer with a specific ID.
 func (c customerHandler) delete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
@@ -131,7 +133,8 @@ func (c customerHandler) delete() http.HandlerFunc {
 	}
 }
 
-// saveCustomer Admin can create a new customers
+// updateCustomer function handles requests to update a customer's data by their ID.
+// Validating the request and sending the updated entity to the service.
 func (c customerHandler) updateCustomer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var customer requests.RequestCustomer
