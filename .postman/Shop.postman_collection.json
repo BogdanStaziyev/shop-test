@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "02d503fc-1c20-479c-b32e-5c73db2c0388",
+		"_postman_id": "0ef728e9-d641-40b7-a59f-3f363106d2d7",
 		"name": "Shop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20982235"
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"name\":\"New User\",\n \"password\":\"qwerty12345\",\n \"email\":\"user@gmail.com\",\n \"phone\": \"1234567890\"\n}",
+							"raw": "{\n \"name\":\"User User\",\n \"password\":\"qwerty12345\",\n \"email\":\"user@gmail.com\",\n \"phone\": \"0977777777\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"name\":\"Change UerToNew\",\n \"password\":\"qwerty1234567890\",\n \"email\":\"newEmaol@gmail.com\",\n \"phone\": \"09234567890\"\n}",
+							"raw": "{\n \"name\":\"New New\",\n \"password\":\"qwerty1234567890\",\n \"email\":\"newEmaol@gmail.com\",\n \"phone\": \"09234567890\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -178,6 +178,25 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/ping",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"ping"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
